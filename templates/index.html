@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='/css/output.css') }}"
+    />
+  </head>
+  <body class="flex items-center justify-center h-screen bg-gray-100">
+    <div class="max-w-lg p-6 mx-auto bg-white rounded-lg shadow-lg">
+      <h1 class="mb-4 text-2xl font-bold text-center">Weather App</h1>
+      <form
+        action="/weather"
+        method="post"
+        class="space-y-4"
+        enctype="multipart/form-data"
+      >
+        <div>
+          <label for="city" class="block text-sm font-medium text-gray-700"
+            >Enter City</label
+          >
+          <input
+            type="text"
+            id="city"
+            name="city"
+            class="w-full p-2 mt-1 border rounded focus:ring focus:ring-blue-400"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full p-2 mt-4 font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+        >
+          Get Weather
+        </button>
+      </form>
+
+      <!-- Error Message -->
+      {% if error %}
+      <div
+        class="p-3 mt-4 text-sm text-red-700 bg-red-100 border border-red-400 rounded-lg"
+      >
+        ⚠️ {{ error }}
+      </div>
+      {% endif %} {% if location and current %}
+      <div class="p-4 mt-4 bg-gray-100 rounded-lg shadow-md">
+        <h2 class="text-lg font-semibold text-gray-800">
+          {{ location.name }}, {{ location.region }}, {{ location.country }}
+        </h2>
+
+        <!-- Weather Icon -->
+        <div class="flex items-center mt-2">
+          <img
+            src="https:{{ current.condition.icon }}"
+            alt="{{ current.condition.text }}"
+            class="w-12 h-12"
+          />
+          <p class="ml-2 text-lg font-medium">{{ current.condition.text }}</p>
+        </div>
+
+        <!-- Temperature -->
+        <p class="mt-2 text-xl font-bold">
+          {{ current.temp_c }}°C / {{ current.temp_f }}°F
+        </p>
+        <p class="text-sm text-gray-600">
+          Feels like: {{ current.feelslike_c }}°C
+        </p>
+
+        <!-- Wind and Other Details -->
+        <p class="mt-2 text-sm text-gray-600">
+          Humidity: {{ current.humidity }}% | Wind: {{ current.wind_kph }} km/h
+          ({{ current.wind_dir }})
+        </p>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
